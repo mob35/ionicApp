@@ -51,20 +51,22 @@ angular.module('ionicApp', ['ionic'])
         isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
     $scope.sendMessage = function() {
-        alternate = !alternate;
-        console.log(alternate ? '12345' : '54321');
+        // alternate = !alternate;
+        console.log(alternate ? 'chatOne' : 'chatTwo');
+        chatOne = 'chatOne';
+        chatTwo = 'chatTwo';
         
-
-        //var d = new Date();
-        //d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+        $scope.hello = 'hello!';
 
         $scope.messages.push({
-            userId: alternate ? '12345' : '54321',
-
+            // userId: alternate ? 'aaa' : 'bbb',
+            userId: chatOne,
             text: $scope.data.message,
-            //time: d
+            
+        },{
+            userId: chatTwo,
+            text: $scope.hello,
         });
-
         delete $scope.data.message;
         $ionicScrollDelegate.scrollBottom(true);
 
@@ -90,9 +92,7 @@ angular.module('ionicApp', ['ionic'])
 
 
     $scope.data = {};
-    $scope.myId = '54321';
-    $scope.myIds = '12345';
-
+    $scope.myId = 'chatTwo';
     $scope.messages = [];
 
 })
