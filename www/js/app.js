@@ -46,31 +46,36 @@ angular.module('ionicApp', ['ionic'])
 .controller('Messages', function($scope, $timeout, $ionicScrollDelegate) {
 
     $scope.hideTime = true;
+    $scope.data = {};
+    $scope.myId = 'wordRight';
+    $scope.messages = [];
 
     var alternate,
         isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
     $scope.sendMessage = function() {
         // alternate = !alternate;
-        console.log(alternate ? 'chatOne' : 'chatTwo');
-        chatOne = 'chatOne';
-        chatTwo = 'chatTwo';
-        
-        $scope.hello = 'hello!';
+        // console.log(alternate ? 'chatOne' : 'chatTwo');
 
         $scope.messages.push({
-            // userId: alternate ? 'aaa' : 'bbb',
-            userId: chatOne,
+            userId: 'wordLeft',
             text: $scope.data.message,
-            
-        },{
-            userId: chatTwo,
-            text: $scope.hello,
+
         });
         delete $scope.data.message;
         $ionicScrollDelegate.scrollBottom(true);
 
     };
+    $scope.callMessage = function() {
+
+        $scope.hello = 'hello!';
+        $scope.messages.push({
+            userId: 'wordRight',
+            text: $scope.hello,
+        });
+        delete $scope.data.message;
+        $ionicScrollDelegate.scrollBottom(true);
+    }
 
 
     $scope.inputUp = function() {
@@ -90,10 +95,6 @@ angular.module('ionicApp', ['ionic'])
         // cordova.plugins.Keyboard.close();
     };
 
-
-    $scope.data = {};
-    $scope.myId = 'chatTwo';
-    $scope.messages = [];
 
 })
 
