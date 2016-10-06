@@ -7,14 +7,6 @@
 
     <link rel="manifest" href="manifest.json">
 
-    <!-- un-comment this code to enable service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('service worker installed'))
-          .catch(err => console.log('Error', err));
-      }
-    </script>-->
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <!-- <link href="css/style.css" rel="stylesheet"> -->
@@ -36,7 +28,7 @@
   <body ng-controller="Messages">
     <ion-pane "class="messaging-view">
     <ion-header-bar class="bar-calm">
-      <h1 class="title">Ioinc Chat</h1>
+      <h1 class="title">Peak EN-TH</h1>
     </ion-header-bar>
 
     <ion-content class="content-stable"
@@ -60,9 +52,9 @@
 
     <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
       <label class="item-input-wrapper">
-        <input type="text" placeholder="Type your message" on-return="sendMessage(); callMessage(); closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" />
+        <input type="text" placeholder="Translate your message" on-return="sendMessage();closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" />
       </label>
-      <button class="button button-clear" ng-click="sendMessage(); callMessage()">
+      <button class="button button-clear" ng-click="sendMessage();">
         Send
       </button>
     </ion-footer-bar>

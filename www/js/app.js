@@ -42,59 +42,75 @@ angular.module('ionicApp', ['ionic'])
             }
         }
     })
-.controller('Messages', function($scope, $timeout, $ionicScrollDelegate) {
-    $scope.hideTime = true;
-    $scope.data = {};
-    $scope.myId = 'wordRight';
-    $scope.messages = [];
+    .controller('Messages', function($scope, $timeout, $ionicScrollDelegate, $http) {
+        $scope.data = {};
+        $scope.myId = 'wordRight';
+        $scope.messages = [];
+        $scope.apikey = "AIzaSyDqOnCv6Up_yeFhEXwlSZdbTJD3yZifnZ8";
 
-    var alternate,
-        isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-
-
-
-    $scope.sendMessage = function() {
-        // alternate = !alternate;
-        // console.log(alternate ? 'chatOne' : 'chatTwo');
-
-        $scope.messages.push({
-            userId: 'wordLeft',
-            text: $scope.data.message,
-
-        });
-        delete $scope.data.message;
-        $ionicScrollDelegate.scrollBottom(true);
-
-    };
-    $scope.callMessage = function() {
-
-        $scope.hello = 'hello!';
-        $scope.messages.push({
-            userId: 'wordRight',
-            text: $scope.hello,
-        });
-        delete $scope.data.message;
-        $ionicScrollDelegate.scrollBottom(true);
-    };
+        var alternate,
+            isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
 
-    $scope.inputUp = function() {
-        if (isIOS) $scope.data.keyboardHeight = 216;
-        $timeout(function() {
-            $ionicScrollDelegate.scrollBottom(true);
-        }, 300);
 
-    };
+        $scope.sendMessage = function() {
+            // alternate = !alternate;
+            // console.log(alternate ? 'chatOne' : 'chatTwo');
+            $scope.messages.push({
+                userId: 'wordLeft',
+                text: $scope.data.message,
 
-    $scope.inputDown = function() {
-        if (isIOS) $scope.data.keyboardHeight = 0;
-        $ionicScrollDelegate.resize();
-    };
+            });
+            //todo translator
+            
+            var api_url = 'https://www.googleapis.com/language/translate/v2?key=' + $scope.apikey + '&q=' + $scope.data.message + '&source=en&target=th';
+            $http.get(api_url).then(function(response) {
+                //the response from the server is now contained in 'response'
+                //console.log(JSON.stringify(response.data.data.translations[0].translatedText));
+                result = response.data.data.translations[0].translatedText;
+                $scope.callMessage(result);
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
 
-    $scope.closeKeyboard = function() {
-        // cordova.plugins.Keyboard.close();
-    };
-})
+
+            }, function(error) {
+                // defer.reject(result);
+                $scope.callMessage("");
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
+            });
+
+
+        };
+        $scope.callMessage = function(message) {
+
+            $scope.messages.push({
+                userId: 'wordRight',
+                text: message,
+            });
+
+        };
+
+    
+
+
+        $scope.inputUp = function() {
+            if (isIOS) $scope.data.keyboardHeight = 216;
+            $timeout(function() {
+                $ionicScrollDelegate.scrollBottom(true);
+            }, 300);
+
+        };
+
+        $scope.inputDown = function() {
+            if (isIOS) $scope.data.keyboardHeight = 0;
+            $ionicScrollDelegate.resize();
+        };
+
+        $scope.closeKeyboard = function() {
+            // cordova.plugins.Keyboard.close();
+        };
+    })
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {

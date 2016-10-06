@@ -1,5 +1,6 @@
 // Ionic Starter App
 
+
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -41,58 +42,75 @@ angular.module('ionicApp', ['ionic'])
             }
         }
     })
+    .controller('Messages', function($scope, $timeout, $ionicScrollDelegate, $http) {
+        $scope.data = {};
+        $scope.myId = 'wordRight';
+        $scope.messages = [];
+        $scope.apikey = "AIzaSyDqOnCv6Up_yeFhEXwlSZdbTJD3yZifnZ8";
+
+        var alternate,
+            isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
 
-.controller('Messages', function($scope, $timeout, $ionicScrollDelegate) {
 
-    $scope.hideTime = true;
+        $scope.sendMessage = function() {
+            // alternate = !alternate;
+            // console.log(alternate ? 'chatOne' : 'chatTwo');
+            $scope.messages.push({
+                userId: 'wordLeft',
+                text: $scope.data.message,
 
-    var alternate,
-        isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-
-    $scope.sendMessage = function() {
-        alternate = !alternate;
-        console.log(alternate ? '12345' : '54321');
-        
-        
-        var d = new Date();
-        d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-
-        $scope.messages.push({
-            userId: alternate ? '12345' : '54321',
-            text: $scope.data.message,
-            time: d
-        });
-
-        delete $scope.data.message;
-        $ionicScrollDelegate.scrollBottom(true);
-
-    };
+            });
+            //todo translator
+            
+            var api_url = 'https://www.googleapis.com/language/translate/v2?key=' + $scope.apikey + '&q=' + $scope.data.message + '&source=en&target=th';
+            $http.get(api_url).then(function(response) {
+                //the response from the server is now contained in 'response'
+                //console.log(JSON.stringify(response.data.data.translations[0].translatedText));
+                result = response.data.data.translations[0].translatedText;
+                $scope.callMessage(result);
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
 
 
-    $scope.inputUp = function() {
-        if (isIOS) $scope.data.keyboardHeight = 216;
-        $timeout(function() {
-            $ionicScrollDelegate.scrollBottom(true);
-        }, 300);
-
-    };
-
-    $scope.inputDown = function() {
-        if (isIOS) $scope.data.keyboardHeight = 0;
-        $ionicScrollDelegate.resize();
-    };
-
-    $scope.closeKeyboard = function() {
-        // cordova.plugins.Keyboard.close();
-    };
+            }, function(error) {
+                defer.reject(result);
+                $scope.callMessage("");
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
+            });
 
 
-    $scope.data = {};
-    $scope.myId = '12345';
-    $scope.messages = [];
+        };
+        $scope.callMessage = function(message) {
 
-})
+            $scope.messages.push({
+                userId: 'wordRight',
+                text: message,
+            });
+
+        };
+
+    
+
+
+        $scope.inputUp = function() {
+            if (isIOS) $scope.data.keyboardHeight = 216;
+            $timeout(function() {
+                $ionicScrollDelegate.scrollBottom(true);
+            }, 300);
+
+        };
+
+        $scope.inputDown = function() {
+            if (isIOS) $scope.data.keyboardHeight = 0;
+            $ionicScrollDelegate.resize();
+        };
+
+        $scope.closeKeyboard = function() {
+            // cordova.plugins.Keyboard.close();
+        };
+    })
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
